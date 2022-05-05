@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import StyledPanel from "./Panel.styles";
 import CustomInput from '../CustomInput/CustomInput';
+import { setLocalStorage, getLocalStorage } from '../../Helpers/LocalStorage';
 
 const Panel = props => {
   const [pages, setPages] = useState(1);
   const [languages, setLanguages] = useState(1);
   const [setExtra] = props.stateProps;
+
+  const initialization = useRef(false);
 
   const handleChange = e => {
     const setter = e.target.id === 'pages' ? setPages : setLanguages;
@@ -16,10 +19,21 @@ const Panel = props => {
   }
 
   useEffect( () => {
-    setExtra( pages * languages * 30 ); // eslint-disable-next-line
+    if (initialization.current) {
+      setLocalStorage({pages, languages});
+      setExtra( pages * languages * 30 );
+    } // eslint-disable-next-line
   }, [pages, languages]);
 
   useEffect( () => {
+    const states = {pages: setPages, languages: setLanguages};
+
+    Object.keys(states).forEach( key => {
+      states[key]( getLocalStorage(key, 1) );
+    })
+
+    initialization.current = true;
+
     return () => setExtra(0); // eslint-disable-next-line
   }, []);
 
