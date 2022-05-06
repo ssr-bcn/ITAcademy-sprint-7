@@ -8,7 +8,7 @@ const Panel = props => {
   const [languages, setLanguages] = useState(1);
   const [setExtra] = props.stateProps;
 
-  const initialization = useRef(false);
+  const initializated = useRef(false);
 
   const handleChange = e => {
     const setter = e.target.id === 'pages' ? setPages : setLanguages;
@@ -19,7 +19,7 @@ const Panel = props => {
   }
 
   useEffect( () => {
-    if (initialization.current) {
+    if (initializated.current) {
       setLocalStorage({pages, languages});
       setExtra( pages * languages * 30 );
     } // eslint-disable-next-line
@@ -32,7 +32,7 @@ const Panel = props => {
       states[key]( getLocalStorage(key, 1) );
     })
 
-    initialization.current = true;
+    initializated.current = true;
 
     return () => setExtra(0); // eslint-disable-next-line
   }, []);

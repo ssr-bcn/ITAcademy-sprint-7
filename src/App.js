@@ -9,27 +9,48 @@ function App() {
   const [budget, setBudget] = useState(0);
   const [extra, setExtra] = useState(0);
 
-  const initialization = useRef(false);
+  /**
+   * Referencia inicializada en false para controlar la ejecución
+   * del useEffect que se activa tras la actualización de un estado.
+   * Al llamar a useState en las diferentes variables de estado, 
+   * ese UseEffect detectaba ya la inicialización y se anticipaba
+   * al useEffect que recuperaba los datos de LocalStorage,
+   * que de esta manera eran sobreescritos.
+   */
+  const initializated = useRef(false);
 
+  /**
+   * useEffect para actualizar el estado de budget y guardar
+   * los cambios de todos los estados en LocalStorage.
+   * 
+   * Con el condicional se evita que se ejecute en el momento
+   * de inicialización del componente, ya que sobreescribiría
+   * la información de LocalStorage con los vales por defecto.
+   */
   useEffect( () => {
-    console.log('update:', initialization.current);
-    if (initialization.current) {
-      console.log('updating...');
+    if (initializated.current) {
       const sum = web + seo + ads + extra;
       setBudget(sum);
       setLocalStorage({budget: sum, web, seo, ads, extra});
     }
   }, [web, seo, ads, extra]);
 
+  /**
+   * useEffect de una sola ejecución para recuperar los datos
+   * guardados en LocalStorage.
+   * 
+   * Tras la recuperación de los datos de LocalStorage, 
+   * se cambia el valor de la referencia initialization 
+   * para que el useEffect de actualización funcione sin trabas.
+   */
   useEffect( () => {
-    console.log('mount');
     const states = {web: setWeb, seo: setSeo, ads: setAds, budget: setBudget, extra: setExtra};
 
     Object.keys(states).forEach( key => {
       states[key]( getLocalStorage(key, 0) );
     })
     
-    initialization.current = true;
+    initializated.current = true;
   }, []);
 
   return (
