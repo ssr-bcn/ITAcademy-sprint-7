@@ -1,27 +1,30 @@
 import { useRef, useEffect } from "react";
+import ReactDOM from 'react-dom';
 import StyledModal from "./Modal.styles";
 
-const Modal = ({modalText, stateProps}) => {
+const Modal = ({content, setModal}) => {
   const modalRef = useRef();
-  const [setModal] = stateProps;
+
+  const handleClick = e => {
+    e.stopPropagation();
+
+    if (e.target.id !== 'modalContent') {
+      setModal(false);
+    }
+  }
 
   useEffect( () => {
     const element = modalRef.current;
-    element.addEventListener( 'click', e => {
-      e.stopPropagation();
+    element.addEventListener( 'click', handleClick );
 
-      if (e.target.id !== 'modalContent') {
-        setModal(false)
-      }
-    });
-
-    return () => element.removeEventListener( 'click', setModal(false) );
+    return () => element.removeEventListener( 'click', handleClick );
   });
 
-  return (
+  return ReactDOM.createPortal(
     <StyledModal ref={modalRef}>
-      <div id="modalContent">{modalText}</div>
-    </StyledModal>
+      <div id="modalContent">{content}</div>
+    </StyledModal>,
+    document.body
   );
 }
 

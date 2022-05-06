@@ -15,7 +15,7 @@ const Popup = ({modalText}) => {
     <>
       <StyledPopup href="#" onClick={handleClick}>ℹ️</StyledPopup>
       {
-        modal && <Modal modalText={modalText} stateProps={[setModal]} />
+        modal && <Modal content={modalText} setModal={setModal} />
       }
     </>
   );
