@@ -45,7 +45,11 @@ const Panel = props => {
           id="pages" 
           action={handleChange} 
           stateProps={[pages, setPages]} 
-          modalText="En aquest component ha d'indicar la quantitat de pàgines que tindrà la seva pàgina web"
+          modalText={
+            `Indiqui la quantitat de pàgines que tindrà la seva pàgina web.
+            Ara mateix el pressupost contempla que ${ !Boolean(pages) ? 'no' : '' } tindrà 
+            ${ !Boolean(pages) ? 'cap' : pages} ${ !Boolean(pages) || pages === 1 ? 'pàgina' : 'pàgines'}`
+          }
         />
       </div>
       <div>
@@ -54,7 +58,11 @@ const Panel = props => {
           id="languages" 
           action={handleChange} 
           stateProps={[languages, setLanguages]} 
-          modalText="En aquest component ha d'indicar la quantitat d'idiomes en què estarà disponible la seva pàgina web"
+          modalText={
+            `Indiqui la quantitat d'idiomes que tindrà la seva pàgina web.\r\n
+            Ara mateix el pressupost contempla que ${ !Boolean(languages) ? 'no' : '' } tindrà 
+            ${ !Boolean(languages) ? 'cap' : languages} ${ !Boolean(languages) || languages === 1 ? 'idioma' : 'idiomes'}`
+          }
         />
       </div>
     </StyledPanel>
