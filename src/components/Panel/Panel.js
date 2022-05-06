@@ -41,11 +41,21 @@ const Panel = props => {
     <StyledPanel>
       <div>
         <label htmlFor="pages">Quantitat de pàgines:</label>
-        <CustomInput id="pages" action={handleChange} stateProps={[pages, setPages]} />
+        <CustomInput 
+          id="pages" 
+          action={handleChange} 
+          stateProps={[pages, setPages]} 
+          modalText="En aquest component ha d'indicar la quantitat de pàgines que tindrà la seva pàgina web"
+        />
       </div>
       <div>
         <label htmlFor="languages">Quantitat d'idiomes:</label>
-        <CustomInput id="languages" action={handleChange} stateProps={[languages, setLanguages]} />
+        <CustomInput 
+          id="languages" 
+          action={handleChange} 
+          stateProps={[languages, setLanguages]} 
+          modalText="En aquest component ha d'indicar la quantitat d'idiomes en què estarà disponible la seva pàgina web"
+        />
       </div>
     </StyledPanel>
   );
