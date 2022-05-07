@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
-import Home from '../pages/Home';
-import Budget from '../pages/Budget';
+import Home from '../pages/Home/Home';
+import Budget from '../pages/Budget/Budget';
 
 const RouteConfig = () => (
     <BrowserRouter>

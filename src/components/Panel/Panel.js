@@ -32,6 +32,8 @@ const Panel = props => {
       states[key]( getLocalStorage(key, 1) );
     })
 
+    setExtra( pages * languages * 30 );
+
     initializated.current = true;
 
     return () => setExtra(0); // eslint-disable-next-line
@@ -42,7 +44,7 @@ const Panel = props => {
       <div>
         <label htmlFor="pages">Quantitat de pàgines:</label>
         <CustomInput 
-          id="pages" 
+          id="pages"
           action={handleChange} 
           stateProps={[pages, setPages]} 
           modalText={
