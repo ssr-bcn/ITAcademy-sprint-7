@@ -1,21 +1,24 @@
-import { useContext, useEffect } from 'react';
+import { useEffect, useContext } from "react";
 import { BudgetContext } from "../../application/provider";
+import { getLocalStorage } from "../../helpers/LocalStorage";
 import StyledBudgetList from "./BudgetList.styles";
 import BudgetListItem from '../BudgetListItem/BudgetListItem';
 
 const BudgetList = () => {
-  const [budgetElements] = useContext(BudgetContext);
+  const [budgetList, setBudgetList] = useContext(BudgetContext);
 
   useEffect( () => {
-  }, [budgetElements]);
+    const init = getLocalStorage('budgetList', []);
+    setBudgetList(init); // eslint-disable-next-line
+  }, []);
 
-  return (
+    return (
     <StyledBudgetList>
       <h2>Llistat de pressupostos</h2>
       <ul>
         {
-          budgetElements.length > 0 ?
-            budgetElements.map( budget => {
+          budgetList.length > 0 ?
+            budgetList.map( budget => {
               return (
                 <BudgetListItem key={budget.date.toLocaleString()} data={budget} />
               );

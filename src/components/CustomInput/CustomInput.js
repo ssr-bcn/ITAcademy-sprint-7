@@ -1,19 +1,47 @@
+import { useRef, useContext } from 'react';
+import { BudgetFormContext } from '../../application/provider';
+import { getClickModifiedValues } from '../BudgetForm/helpers';
+import { setLocalStorage } from '../../helpers/LocalStorage';
 import StyledCustomInput from "./CustomInput.styles";
 import Popup from "../Popup/Popup";
 
 const CustomInput = props => {
-  const [state, setState] = props.stateProps;
+  const [budgetElements, setBudgetElements] = useContext(BudgetFormContext);
+  const input = useRef();
 
-  const handleClick = (value, e) => {
+  const handleClick = (e, addend) => {
     e.preventDefault();
-    setState( state + value );
+
+    if ( budgetElements[input.current.name] + addend < 0 ) return;
+
+    const modifiedValues = getClickModifiedValues( budgetElements, input.current.name, budgetElements[input.current.name] + addend);
+    const newBudget = {
+      ...budgetElements,
+      ...modifiedValues
+    };
+
+    setBudgetElements(newBudget);
+    setLocalStorage('budget', newBudget);
+  }
+
+  const handleChange = () => {
+    if ( !Number.isInteger(+input.current.value) || input.current.value < 0 ) return;
+
+    const modifiedValues = getClickModifiedValues( budgetElements, input.current.name, input.current.value);
+    const newBudget = {
+      ...budgetElements,
+      ...modifiedValues
+    };
+
+    setBudgetElements(newBudget);
+    setLocalStorage('budget', newBudget);
   }
 
   return (
     <StyledCustomInput>
-      <button onClick={ (e) => handleClick(1, e) }>+</button>
-      <input type="text" id={props.id} name={props.id} value={state} onChange={props.action} />
-      <button onClick={ (e) => handleClick(-1, e) }>-</button>
+      <button onClick={(e) => handleClick(e, 1)}>+</button>
+      <input type="text" ref={input} id={props.id} name={props.id} value={budgetElements[props.id]} onChange={handleChange} />
+      <button onClick={(e) => handleClick(e, -1)}>-</button>
       <Popup modalText={props.modalText}/>
     </StyledCustomInput>
   );

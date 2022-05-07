@@ -1,7 +1,6 @@
 import StyledBudgetListItem from "./BudgetListItem.styles";
 
 const BudgetListItem = ( {data} ) => {
-
   return (
     <StyledBudgetListItem>
       <div>
@@ -12,7 +11,7 @@ const BudgetListItem = ( {data} ) => {
             Boolean(data.web) &&
             <li>
               {data.web}<br/>
-              {data.pages} pàgines en {data.languages} idiomes: {data.extra}€
+              {data.pages} pàgines en {data.languages} idiomes: {data.pages * data.languages * 30}€
             </li>
           }
           {

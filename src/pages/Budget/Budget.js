@@ -1,11 +1,13 @@
 import BudgetForm from '../../components/BudgetForm/BudgetForm';
 import BudgetList from '../../components/BudgetList/BudgetList';
-import { BudgetProvider } from '../../application/provider';
+import { BudgetProvider, BudgetFormProvider } from '../../application/provider';
 
 const Budget = () => {
   return (
     <BudgetProvider>
-      <BudgetForm />
+      <BudgetFormProvider>
+        <BudgetForm />
+      </BudgetFormProvider>
       <BudgetList />
     </BudgetProvider>
   );
