@@ -4,7 +4,7 @@ const BudgetListItem = ( {data} ) => {
   return (
     <StyledBudgetListItem>
       <div>
-        <h4>{data.budgetName}<span>{data.date.toLocaleString()}</span></h4>
+        <h4>{data.budgetName}<span>{new Date(data.date).toLocaleString()}</span></h4>
         <p>Pressupost realitzat pel client {data.client}:</p>
         <ul>
           {

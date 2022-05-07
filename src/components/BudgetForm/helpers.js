@@ -17,7 +17,11 @@ const getCheckModifiedValues = ( state, event ) => {
   webActive = event.target.name === 'web' ? event.target.checked : webActive;
   budget += webActive ? state.pages * state.languages * 30 : 0;
 
-  return { [event.target.name]: newValue, budget };
+  // Si no está activada, reseteamos los estados de pages y languages
+  const pagesAndLanguages = webActive ? {} : { pages: 1, languages: 1};
+  
+
+  return { [event.target.name]: newValue, ...pagesAndLanguages, budget };
 }
 
 const getClickModifiedValues = (state, property, newValue) => {
