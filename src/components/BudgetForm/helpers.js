@@ -66,23 +66,47 @@ const checkFormErrors = ( state, stateList ) => {
 const setUrlParams = state => {
   const baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
   const params = ['web', 'seo', 'ads', 'pages', 'languages', 'budget'];
+  const trustyValues = { web: 500, seo: 300, ads: 200 };
   const paramsUrl = Object.keys(state)
     .filter( property => params.includes(property) )
-    .map( property => `${property}=${state[property]}` )
+    .map( property => {
+      const value = Object.keys(trustyValues).includes(property) ? Boolean(state[property]) : state[property];
+      return `${property}=${value}` 
+    })
     .join('&');
   const newUrl = `${baseUrl}?${paramsUrl}`;
 
-  window.history.replaceState({path:newUrl},'',newUrl);
+  window.history.replaceState( {path:newUrl}, '', newUrl );
 }
 
 const getUrlParams = () => {
   const paramsUrl = ( new URL(document.location) ).searchParams;
   const params = ['web', 'seo', 'ads', 'pages', 'languages', 'budget'];
-  const properties = {};
+  const trustyValues = { web: 500, seo: 300, ads: 200 };
+  let properties = {};
 
-  for ( const [key, value] of paramsUrl ) {
-    if ( params.includes(key) ) properties[key] = +value;
+  for ( const [prop, value] of paramsUrl ) {
+    if ( params.includes(prop) ) {
+      let assignment;
+
+      if ( Object.keys(trustyValues).includes(prop) ) {
+        assignment = value === 'true' ? trustyValues[prop] : 0;
+      } else {
+        assignment = Number.isInteger(+value) ? +value : 0;
+      }
+
+      properties[prop] = assignment;
+    }
   }
+
+  const addends = ['web', 'seo', 'ads'];
+  let propertiesSum = addends.reduce( (a, b) => ( a + ( properties[b] ?? 0 ) ), 0);
+
+  if ( properties['web'] && properties['web'] === 500 ) {
+    propertiesSum += properties['pages'] && properties['languages'] ? properties['pages'] * properties['languages'] * 30 : 0;
+  }
+
+  if ( !properties['budget'] || propertiesSum !== properties['budget'] ) properties = {};
 
   return properties;
 }

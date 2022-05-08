@@ -4,13 +4,14 @@ import { getCheckModifiedValues, checkFormErrors, setUrlParams, getUrlParams } f
 import { setLocalStorage, getLocalStorage } from '../../helpers/LocalStorage';
 import StyledBudgetForm from './BudgetForm.styles';
 import Panel from '../Panel';
+import Modal from '../Modal/Modal';
 
 const BudgetForm = () => {
   const [budgetElements, setBudgetElements] = useContext(BudgetFormContext);
   const [budgetList, setBudgetList] = useContext(BudgetContext);
   const [formErrors, setFormErrors] = useState([]);
+  const [modal, setModal] = useState(false);
 
-  const componentIsMounted = useRef(false);
   const form = useRef();
 
   const initialBudget = {
@@ -92,18 +93,24 @@ const BudgetForm = () => {
   useEffect( () => {
     let init = {...initialBudget};
     const paramsFromUrl = getUrlParams();
+
     if ( Object.keys(paramsFromUrl).length > 0 ) {
       init = { ...init, ...paramsFromUrl };
       setLocalStorage('budget', init);
     } else {
       init = getLocalStorage('budget', initialBudget);
+      setUrlParams(init);
+      setModal(true);
     }
-    setBudgetElements(init);
-    componentIsMounted.current = true; // eslint-disable-next-line
+
+    setBudgetElements(init); // eslint-disable-next-line
   }, []);
 
   return (
       <StyledBudgetForm>
+        {
+          modal && <Modal content="La URL introduïda tenia errors. S'ha restablert a la de l'últim pressupost guardat a LocalStorage." setModal={setModal} />
+        }
         <h2>Què vols fer?</h2>
 
         <form ref={form}>
