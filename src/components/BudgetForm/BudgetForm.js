@@ -92,7 +92,7 @@ const BudgetForm = () => {
    */
   useEffect( () => {
     let init = {...initialBudget};
-    const paramsFromUrl = getUrlParams();
+    const [urlHasParams, paramsFromUrl] = getUrlParams();
 
     if ( Object.keys(paramsFromUrl).length > 0 ) {
       init = { ...init, ...paramsFromUrl };
@@ -100,7 +100,7 @@ const BudgetForm = () => {
     } else {
       init = getLocalStorage('budget', initialBudget);
       setUrlParams(init);
-      setModal(true);
+      if (urlHasParams) setModal(true);
     }
 
     setBudgetElements(init); // eslint-disable-next-line

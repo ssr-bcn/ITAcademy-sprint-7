@@ -80,6 +80,10 @@ const setUrlParams = state => {
 }
 
 const getUrlParams = () => {
+  if (!document.location.toString().includes('?')) {
+    return [false, {}];
+  }
+
   const paramsUrl = ( new URL(document.location) ).searchParams;
   const params = ['web', 'seo', 'ads', 'pages', 'languages', 'budget'];
   const trustyValues = { web: 500, seo: 300, ads: 200 };
@@ -108,7 +112,7 @@ const getUrlParams = () => {
 
   if ( !properties['budget'] || propertiesSum !== properties['budget'] ) properties = {};
 
-  return properties;
+  return [true, properties];
 }
 
 export { getCheckModifiedValues, getClickModifiedValues, checkFormErrors, setUrlParams, getUrlParams };
