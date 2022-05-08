@@ -63,4 +63,28 @@ const checkFormErrors = ( state, stateList ) => {
   return errorsMsg;
 }
 
-export { getCheckModifiedValues, getClickModifiedValues, checkFormErrors };
+const setUrlParams = state => {
+  const baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+  const params = ['web', 'seo', 'ads', 'pages', 'languages', 'budget'];
+  const paramsUrl = Object.keys(state)
+    .filter( property => params.includes(property) )
+    .map( property => `${property}=${state[property]}` )
+    .join('&');
+  const newUrl = `${baseUrl}?${paramsUrl}`;
+
+  window.history.replaceState({path:newUrl},'',newUrl);
+}
+
+const getUrlParams = () => {
+  const paramsUrl = ( new URL(document.location) ).searchParams;
+  const params = ['web', 'seo', 'ads', 'pages', 'languages', 'budget'];
+  const properties = {};
+
+  for ( const [key, value] of paramsUrl ) {
+    if ( params.includes(key) ) properties[key] = +value;
+  }
+
+  return properties;
+}
+
+export { getCheckModifiedValues, getClickModifiedValues, checkFormErrors, setUrlParams, getUrlParams };

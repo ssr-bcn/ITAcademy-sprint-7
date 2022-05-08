@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { BudgetContext, BudgetFormContext } from '../../application/provider';
-import { getCheckModifiedValues, checkFormErrors } from './helpers';
+import { getCheckModifiedValues, checkFormErrors, setUrlParams, getUrlParams } from './helpers';
 import { setLocalStorage, getLocalStorage } from '../../helpers/LocalStorage';
 import StyledBudgetForm from './BudgetForm.styles';
 import Panel from '../Panel';
@@ -35,6 +35,7 @@ const BudgetForm = () => {
 
     setBudgetElements(newBudget);
     setLocalStorage('budget', newBudget);
+    setUrlParams( newBudget );
   }
 
   // Controla los eventos en los inputs type=text
@@ -80,6 +81,7 @@ const BudgetForm = () => {
 
     setBudgetElements(initialBudget);
     setLocalStorage('budget', initialBudget);
+    setUrlParams(initialBudget);
     setFormErrors([]);
   }
 
@@ -88,7 +90,14 @@ const BudgetForm = () => {
    * la referencia para que ya se pueda actualizar el estado
    */
   useEffect( () => {
-    const init = getLocalStorage('budget', initialBudget);
+    let init = {...initialBudget};
+    const paramsFromUrl = getUrlParams();
+    if ( Object.keys(paramsFromUrl).length > 0 ) {
+      init = { ...init, ...paramsFromUrl };
+      setLocalStorage('budget', init);
+    } else {
+      init = getLocalStorage('budget', initialBudget);
+    }
     setBudgetElements(init);
     componentIsMounted.current = true; // eslint-disable-next-line
   }, []);

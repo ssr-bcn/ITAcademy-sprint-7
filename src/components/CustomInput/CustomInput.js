@@ -1,6 +1,6 @@
 import { useRef, useContext } from 'react';
 import { BudgetFormContext } from '../../application/provider';
-import { getClickModifiedValues } from '../BudgetForm/helpers';
+import { getClickModifiedValues, setUrlParams } from '../BudgetForm/helpers';
 import { setLocalStorage } from '../../helpers/LocalStorage';
 import StyledCustomInput from "./CustomInput.styles";
 import Popup from "../Popup/Popup";
@@ -22,6 +22,7 @@ const CustomInput = props => {
 
     setBudgetElements(newBudget);
     setLocalStorage('budget', newBudget);
+    setUrlParams(newBudget);
   }
 
   const handleChange = () => {
@@ -35,6 +36,7 @@ const CustomInput = props => {
 
     setBudgetElements(newBudget);
     setLocalStorage('budget', newBudget);
+    setUrlParams( newBudget );
   }
 
   return (
