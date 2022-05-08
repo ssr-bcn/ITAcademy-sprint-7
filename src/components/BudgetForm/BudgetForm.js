@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { BudgetContext, BudgetFormContext } from '../../application/provider';
 import { getCheckModifiedValues, checkFormErrors, setUrlParams, getUrlParams } from './helpers';
 import { setLocalStorage, getLocalStorage } from '../../helpers/LocalStorage';
@@ -11,8 +11,6 @@ const BudgetForm = () => {
   const [budgetList, setBudgetList] = useContext(BudgetContext);
   const [formErrors, setFormErrors] = useState([]);
   const [modal, setModal] = useState(false);
-
-  const form = useRef();
 
   const initialBudget = {
     web: 0,
@@ -87,8 +85,7 @@ const BudgetForm = () => {
   }
 
   /**
-   * Se ejecuta una sola vez tras el montado del componente y reasigna
-   * la referencia para que ya se pueda actualizar el estado
+   * Se ejecuta una sola vez tras el montado del componente
    */
   useEffect( () => {
     let init = {...initialBudget};
@@ -113,7 +110,7 @@ const BudgetForm = () => {
         }
         <h2>Què vols fer?</h2>
 
-        <form ref={form}>
+        <form>
           <ul>
             <li>
               <input type="checkbox" id="web" value="500" name="web" 

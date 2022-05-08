@@ -56,6 +56,7 @@ const BudgetList = () => {
     orderByDateDesc([...budgetList]); // eslint-disable-next-line
   }, [budgetList])
 
+  // Ejecución tras el primer montado del componente
   useEffect( () => {
     const init = getLocalStorage('budgetList', []);
     setBudgetList(init); // eslint-disable-next-line

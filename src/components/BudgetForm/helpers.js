@@ -64,7 +64,7 @@ const checkFormErrors = ( state, stateList ) => {
 }
 
 const setUrlParams = state => {
-  const baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+  const baseUrl = document.location.protocol + "//" + document.location.host + document.location.pathname;
   const params = ['web', 'seo', 'ads', 'pages', 'languages', 'budget'];
   const trustyValues = { web: 500, seo: 300, ads: 200 };
   const paramsUrl = Object.keys(state)
@@ -79,16 +79,24 @@ const setUrlParams = state => {
   window.history.replaceState( {path:newUrl}, '', newUrl );
 }
 
+/**
+ * Devuelve array con dos valores:
+ * - el primero indica si la URL tenía params que recuperar
+ * - el segundo devuelve un objeto con los params recuperados y sus valores
+ */
 const getUrlParams = () => {
+  // Si la URL no tiene params, se impiden comprobaciones innecesarias
   if (!document.location.toString().includes('?')) {
     return [false, {}];
   }
 
+  // URL con params
   const paramsUrl = ( new URL(document.location) ).searchParams;
   const params = ['web', 'seo', 'ads', 'pages', 'languages', 'budget'];
   const trustyValues = { web: 500, seo: 300, ads: 200 };
   let properties = {};
 
+  // Se almacenan los params y sus valores en un objeto con una sanitización inicial
   for ( const [prop, value] of paramsUrl ) {
     if ( params.includes(prop) ) {
       let assignment;
@@ -103,6 +111,7 @@ const getUrlParams = () => {
     }
   }
 
+  // Comprobación de que la suma de los valores de params = budget
   const addends = ['web', 'seo', 'ads'];
   let propertiesSum = addends.reduce( (a, b) => ( a + ( properties[b] ?? 0 ) ), 0);
 
